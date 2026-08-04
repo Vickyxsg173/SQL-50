@@ -1,8 +1,2 @@
 -- Write your PostgreSQL query statement below
-WITH PriorDayTemp AS(
-    SELECT id, recordDate, temperature,
-    LAG(recordDate) OVER(ORDER BY recordDate) as prevDate,
-    LAG(temperature) OVER(ORDER BY recordDate) as prevTemp
-    FROM Weather
-)
-SELECT id FROM PriorDayTemp WHERE temperature>prevTemp AND recordDate - prevDate = 1;
+SELECT today.id FROM Weather today JOIN Weather yesterday ON today.recordDate = yesterday.recordDate + INTERVAL '1 day' WHERE today.temperature>yesterday.temperature;
